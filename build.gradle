@@ -1,0 +1,67 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.1'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+bootJar {
+	archiveBaseName = 'kakaopay'
+    archiveFileName = 'kakaopay.jar'
+    archiveVersion = "0.0.0"
+}
+
+group = 'com.kakao'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-integration'
+	
+	compileOnly 'org.projectlombok:lombok'
+	//runtimeOnly 'org.hsqldb:hsqldb'
+	runtimeOnly 'com.h2database:h2'
+	
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	//implementation 'io.springfox:springfox-swagger2:2.9.2'
+	// NumberFormatException 처리
+	// 출처 : https://kimyhcj.tistory.com/360
+	compile("io.springfox:springfox-swagger2:2.9.2") {
+		exclude module: 'swagger-annotations'
+		exclude module: 'swagger-models'
+	}
+	compile("io.swagger:swagger-annotations:1.5.21")
+	compile("io.swagger:swagger-models:1.5.21")
+	
+	implementation 'com.fasterxml.jackson.core:jackson-core'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	
+	// https://mvnrepository.com/artifact/org.jasypt/jasypt
+	compile group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
+	
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	
+}
+
+test {
+	useJUnitPlatform()
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kakao.card.api.mapper.CardMapper">
+
+    <insert id="insert">
+    	INSERT INTO tb_card_send (
+    		   trade_id
+			 , send_data
+			 , status
+			 , reg_dt
+    	) VALUES (
+    		   #{tradeId}
+    		 , #{sendData}
+    		 , #{status}
+    		 , current_timestamp
+    	)
+    </insert>
+
+</mapper>

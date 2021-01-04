@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kakao.card.api.mapper.SearchMapper">
+
+    <select id="select" resultType="search">
+    	SELECT A.trade_id
+			 , A.pay_gb
+			 , A.card_info
+			 , A.month_ins
+			 , A.price
+			 , A.vat
+			 , A.org_trade_id
+			 , TO_CHAR(A.reg_dt, 'YYYY-MM-DD HH24:MI:SS') AS reg_dt
+			 
+			 , B.status
+    	     
+    	  FROM tb_payment_info A
+    	     , tb_card_send B
+    	     
+    	 WHERE 1 = 1
+    	   AND A.trade_id = B.trade_id
+    	   AND A.trade_id = #{tradeId}
+    </select>
+
+	<select id="selectList" resultType="search">
+    	SELECT A.trade_id
+			 , A.pay_gb
+			 , A.card_info
+			 , A.month_ins
+			 , A.price
+			 , A.vat
+			 , A.org_trade_id
+			 , TO_CHAR(A.reg_dt, 'YYYY-MM-DD HH24:MI:SS') AS reg_dt
+			 
+			 , B.status
+    	     
+    	  FROM tb_payment_info A
+    	     , tb_card_send B
+    	     
+    	 WHERE 1 = 1
+    	   AND A.trade_id = B.trade_id
+    	   AND (A.trade_id = #{tradeId}
+    	    OR A.org_trade_id = #{tradeId})
+    	   
+    	 ORDER BY A.reg_dt
+    </select>
+    
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kakao.card.api.mapper.PaymentMapper">
+
+    <insert id="insert">
+    	INSERT INTO tb_payment_info (
+    		   trade_id
+			 , pay_gb
+			 , card_info
+			 , month_ins
+			 , price
+			 , vat
+			 , org_trade_id
+			 , reg_dt
+    	) VALUES (
+    		   #{tradeId}
+    		 , #{payGb}
+    		 , #{cardInfo}
+    		 , #{monthIns}
+    		 , #{price}
+    		 , #{vat}
+    		 , #{orgTradeId}
+    		 , current_timestamp
+    	)
+    </insert>
+    
+    <select id="remainder" resultType="remainderInfo">
+    	SELECT SUM(CASE WHEN A.pay_gb = 'PAYMENT' THEN A.price ELSE A.price * -1 END) AS remainderPrice
+			 , SUM(CASE WHEN A.pay_gb = 'PAYMENT' THEN A.vat ELSE A.vat * -1 END) AS remainderVat
+			 
+    	  FROM tb_payment_info A
+    	     
+    	 WHERE A.trade_id = #{tradeId}
+    	    OR A.org_trade_id = #{tradeId}
+    </select>
+    
+    <update id="mergeLock">
+    	MERGE INTO tb_payment_lock
+		USING DUAL
+		   ON pay_gb = #{payGb}
+		  AND private_key = #{privateKey}
+		 WHEN NOT MATCHED THEN 
+		      INSERT VALUES (#{payGb}, #{privateKey})
+    </update>
+    
+    <delete id="deleteLock">
+    	DELETE FROM tb_payment_lock
+    	 WHERE pay_gb = #{payGb}
+		   AND private_key = #{privateKey}
+    </delete>
+    
+</mapper>
